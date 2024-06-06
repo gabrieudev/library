@@ -39,6 +39,24 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.OK).body(bookService.getAll(pageable).getContent());
     }
 
+    @GetMapping("/by-author/{name}")
+    @PreAuthorize("hasAuthority('SCOPE_BASIC')")
+    public ResponseEntity<List<BookDTO>> getAllByAuthor(
+            Pageable pageable,
+            @PathVariable("name") String name
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllByAuthor(name, pageable).getContent());
+    }
+
+    @GetMapping("/by-category/{name}")
+    @PreAuthorize("hasAuthority('SCOPE_BASIC')")
+    public ResponseEntity<List<BookDTO>> getAllByCategory(
+            Pageable pageable,
+            @PathVariable("name") String name
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllByCategory(name, pageable).getContent());
+    }
+
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<BookDTO> update(@PathVariable("id") Long id, @Valid @RequestBody BookDTO bookDTO) {

@@ -82,5 +82,29 @@ public class BookService {
         );
     }
 
+    /**
+     * retrieves the book by its author's name
+     *
+     * @param name the author's name
+     * @return the Page of books
+     */
+    public Page<BookDTO> getAllByAuthor(String name, Pageable pageable) {
+        return bookRepository.findAllByAuthor(name, pageable).map(
+                book -> mappingService.toDto(book)
+        );
+    }
+
+    /**
+     * retrieves all the books by its category
+     *
+     * @param name the category
+     * @return the Page of books
+     */
+    public Page<BookDTO> getAllByCategory(String name, Pageable pageable) {
+        return bookRepository.findAllByCategory(name, pageable).map(
+                book -> mappingService.toDto(book)
+        );
+    }
+
 }
 
