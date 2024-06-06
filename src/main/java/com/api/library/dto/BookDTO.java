@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -23,7 +24,7 @@ public class BookDTO {
     private AuthorDTO author;
 
     @NotNull
-    private CategoryDTO category;
+    private Set<CategoryDTO> categories;
 
     @NotNull
     private Date publishedDate;

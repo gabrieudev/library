@@ -97,11 +97,11 @@ public class BookService {
     /**
      * retrieves all the books by its category
      *
-     * @param name the category
+     * @param categoryId the category's id
      * @return the Page of books
      */
-    public Page<BookDTO> getAllByCategory(String name, Pageable pageable) {
-        return bookRepository.findAllByCategory(name, pageable).map(
+    public Page<BookDTO> getAllByCategory(Long categoryId, Pageable pageable) {
+        return bookRepository.findAllByCategory(categoryId, pageable).map(
                 book -> mappingService.toDto(book)
         );
     }

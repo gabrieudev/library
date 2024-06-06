@@ -1,6 +1,7 @@
 package com.api.library.repository;
 
 import com.api.library.model.Book;
+import com.api.library.model.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,10 +20,13 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Page<Book> findAllByAuthor(@Param("name") String name, Pageable pageable);
 
     @Query(
-            value = "SELECT b " +
-                    "FROM Book b " +
-                    "WHERE b.category.name = :name"
+            value = "SELECT b.* " +
+                    "FROM tb_books b " +
+                    "JOIN tb_books_categories bc " +
+                    "ON b.id = bc.book_id " +
+                    "WHERE bc.category_id = :categoryId;",
+            nativeQuery = true
     )
-    Page<Book> findAllByCategory(@Param("name") String name, Pageable pageable);
+    Page<Book> findAllByCategory(@Param("categoryId") Long categoryId, Pageable pageable);
 
 }
