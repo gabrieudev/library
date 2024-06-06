@@ -5,6 +5,8 @@ import com.api.library.exception.ObjectNotFoundException;
 import com.api.library.model.Category;
 import com.api.library.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -72,14 +74,16 @@ public class CategoryService {
     }
 
     /**
-     * Retrieves all the categories
+     * Retrieves the categories
      *
-     * @return the List of categories
+     * @return the Page of categories
      */
-    public List<CategoryDTO> getAll() {
-        return categoryRepository.findAll().stream().map(
+    public Page<CategoryDTO> getAll(Pageable pageable) {
+
+        return categoryRepository.findAll(pageable).map(
                 category -> mappingService.toDto(category)
-        ).toList();
+        );
+
     }
 
 }

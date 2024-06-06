@@ -5,9 +5,9 @@ import com.api.library.exception.ObjectNotFoundException;
 import com.api.library.model.Book;
 import com.api.library.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class BookService {
@@ -72,14 +72,14 @@ public class BookService {
     }
 
     /**
-     * Retrieves all the books
+     * Retrieves the books
      *
-     * @return the List of books
+     * @return the Page of books
      */
-    public List<BookDTO> getAll() {
-        return bookRepository.findAll().stream().map(
+    public Page<BookDTO> getAll(Pageable pageable) {
+        return bookRepository.findAll(pageable).map(
                 book -> mappingService.toDto(book)
-        ).toList();
+        );
     }
 
 }

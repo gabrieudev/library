@@ -161,11 +161,9 @@ public class UserService {
      * @return the List of users
      */
     public List<UserDTO> getAll() {
-
         return userRepository.findAll().stream().map(
                 user -> mappingService.toDto(user)
         ).toList();
-
     }
 
 }

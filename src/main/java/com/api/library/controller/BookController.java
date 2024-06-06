@@ -4,8 +4,10 @@ import com.api.library.dto.BookDTO;
 import com.api.library.service.BookService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,27 +21,32 @@ public class BookController {
     private BookService bookService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<Void> save(@Valid @RequestBody BookDTO bookDTO) {
         bookService.save(bookDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_BASIC')")
     public ResponseEntity<BookDTO> getById(@PathVariable("id") Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(bookService.getById(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<BookDTO>> getAll() {
-        return ResponseEntity.status(HttpStatus.OK).body(bookService.getAll());
+    @PreAuthorize("hasAuthority('SCOPE_BASIC')")
+    public ResponseEntity<List<BookDTO>> getAll(Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(bookService.getAll(pageable).getContent());
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<BookDTO> update(@PathVariable("id") Long id, @Valid @RequestBody BookDTO bookDTO) {
         return ResponseEntity.status(HttpStatus.OK).body(bookService.update(id, bookDTO));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         bookService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).build();

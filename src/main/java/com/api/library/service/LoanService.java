@@ -5,9 +5,9 @@ import com.api.library.exception.ObjectNotFoundException;
 import com.api.library.model.Loan;
 import com.api.library.repository.LoanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class LoanService {
@@ -72,14 +72,14 @@ public class LoanService {
     }
 
     /**
-     * Retrieves all the loans
+     * Retrieves the loans
      *
-     * @return the List of loans
+     * @return the Page of loans
      */
-    public List<LoanDTO> getAll() {
-        return loanRepository.findAll().stream().map(
+    public Page<LoanDTO> getAll(Pageable pageable) {
+        return loanRepository.findAll(pageable).map(
                 loan -> mappingService.toDto(loan)
-        ).toList();
+        );
     }
 
 }

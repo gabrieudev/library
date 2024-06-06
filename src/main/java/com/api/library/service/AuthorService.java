@@ -5,9 +5,8 @@ import com.api.library.exception.ObjectNotFoundException;
 import com.api.library.model.Author;
 import com.api.library.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class AuthorService {
@@ -25,13 +24,10 @@ public class AuthorService {
      * @return the author's DTO
      */
     public AuthorDTO getById(Long id) {
-
         Author author = authorRepository.findById(id).orElseThrow(
                 () -> new ObjectNotFoundException("Author not found with this id: " + id)
         );
-
         return mappingService.toDto(author);
-
     }
 
     /**
@@ -40,11 +36,8 @@ public class AuthorService {
      * @param authorDTO the author's DTO
      */
     public void save(AuthorDTO authorDTO) {
-
         Author author = mappingService.toModel(authorDTO);
-
         authorRepository.save(author);
-
     }
 
     /**
@@ -56,17 +49,12 @@ public class AuthorService {
      * @throws ObjectNotFoundException if id is not found
      */
     public AuthorDTO update(Long id, AuthorDTO authorDTO) {
-
         Author author = authorRepository.findById(id).orElseThrow(
                 () -> new ObjectNotFoundException("Author not found with this id: " + id)
         );
-
         mappingService.toModel(authorDTO, author);
-
         Author updatedAuthor = authorRepository.save(author);
-
         return mappingService.toDto(updatedAuthor);
-
     }
 
     /**
@@ -76,26 +64,21 @@ public class AuthorService {
      * @throws ObjectNotFoundException if id is not found
      */
     public void delete(Long id) {
-
         Author author = authorRepository.findById(id).orElseThrow(
                 () -> new ObjectNotFoundException("Author not found with this id: " + id)
         );
-
         authorRepository.delete(author);
-
     }
 
     /**
-     * retrieves all the authors
+     * retrieves the authors
      *
-     * @return the List of authors
+     * @return the Page of authors
      */
-    public List<AuthorDTO> getAll() {
-
-        return authorRepository.findAll().stream().map(
+    public Page<AuthorDTO> getAll(Pageable pageable) {
+        return authorRepository.findAll(pageable).map(
                 author -> mappingService.toDto(author)
-        ).toList();
-
+        );
     }
 
 }
