@@ -68,4 +68,16 @@ public class MappingService {
         modelMapper.map(loanDTO, loan);
     }
 
+    public Review toModel(ReviewDTO reviewDTO) {
+        return modelMapper.map(reviewDTO, Review.class);
+    }
+
+    public ReviewDTO toDto(Review review) {
+        return modelMapper.map(review, ReviewDTO.class);
+    }
+
+    public void toModel(ReviewDTO reviewDTO, Review review) {
+        modelMapper.map(reviewDTO, review);
+    }
+
 }
