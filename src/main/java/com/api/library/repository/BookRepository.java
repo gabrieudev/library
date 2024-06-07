@@ -1,7 +1,6 @@
 package com.api.library.repository;
 
 import com.api.library.model.Book;
-import com.api.library.model.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

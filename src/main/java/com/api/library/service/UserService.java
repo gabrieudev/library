@@ -1,7 +1,7 @@
 package com.api.library.service;
 
 import com.api.library.dto.*;
-import com.api.library.exception.ObjectNotFoundException;
+import com.api.library.exception.EntityNotFoundException;
 import com.api.library.exception.UserAlreadyExistsException;
 import com.api.library.model.CheckerUser;
 import com.api.library.model.User;
@@ -104,17 +104,17 @@ public class UserService {
      *
      * @param userId the user's id
      * @param verificationId the verification's id
-     * @throws ObjectNotFoundException if user or checkerUser is not found
+     * @throws EntityNotFoundException if user or checkerUser is not found
      * @throws AccessDeniedException if ids are different or code has expired
      */
     public void check(UUID userId, UUID verificationId) {
 
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new ObjectNotFoundException("User not found")
+                () -> new EntityNotFoundException("User not found")
         );
 
         CheckerUser checkerUser = checkerUserRepository.findByUser(user).orElseThrow(
-                () -> new ObjectNotFoundException("Code not send")
+                () -> new EntityNotFoundException("Code not send")
         );
 
         if (!verificationId.equals(checkerUser.getId())) {
@@ -135,13 +135,13 @@ public class UserService {
      *
      * @param updatePasswordRequest user information
      * @return updated user
-     * @throws ObjectNotFoundException if user not found
+     * @throws EntityNotFoundException if user not found
      * @throws BadCredentialsException if password is invalid
      */
     public User updatePassword(UpdatePasswordRequest updatePasswordRequest) {
 
         User user = userRepository.findByEmail(updatePasswordRequest.email()).orElseThrow(
-                () -> new ObjectNotFoundException("User not found")
+                () -> new EntityNotFoundException("User not found")
         );
 
         if (!bCryptPasswordEncoder.matches(updatePasswordRequest.password(), user.getPassword())) {

@@ -1,7 +1,7 @@
 package com.api.library.service;
 
 import com.api.library.dto.AuthorDTO;
-import com.api.library.exception.ObjectNotFoundException;
+import com.api.library.exception.EntityNotFoundException;
 import com.api.library.model.Author;
 import com.api.library.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class AuthorService {
      */
     public AuthorDTO getById(Long id) {
         Author author = authorRepository.findById(id).orElseThrow(
-                () -> new ObjectNotFoundException("Author not found with this id: " + id)
+                () -> new EntityNotFoundException("Author not found with this id: " + id)
         );
         return mappingService.toDto(author);
     }
@@ -46,11 +46,11 @@ public class AuthorService {
      * @param id the author's id
      * @param authorDTO the author's DTO
      * @return the updated author's DTO
-     * @throws ObjectNotFoundException if id is not found
+     * @throws EntityNotFoundException if id is not found
      */
     public AuthorDTO update(Long id, AuthorDTO authorDTO) {
         Author author = authorRepository.findById(id).orElseThrow(
-                () -> new ObjectNotFoundException("Author not found with this id: " + id)
+                () -> new EntityNotFoundException("Author not found with this id: " + id)
         );
         mappingService.toModel(authorDTO, author);
         Author updatedAuthor = authorRepository.save(author);
@@ -61,11 +61,11 @@ public class AuthorService {
      * deletes an author by its id
      *
      * @param id the author's id
-     * @throws ObjectNotFoundException if id is not found
+     * @throws EntityNotFoundException if id is not found
      */
     public void delete(Long id) {
         Author author = authorRepository.findById(id).orElseThrow(
-                () -> new ObjectNotFoundException("Author not found with this id: " + id)
+                () -> new EntityNotFoundException("Author not found with this id: " + id)
         );
         authorRepository.delete(author);
     }
