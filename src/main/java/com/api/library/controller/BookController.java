@@ -45,7 +45,7 @@ public class BookController {
             Pageable pageable,
             @PathVariable("name") String name
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllByAuthor(name, pageable).getContent());
+        return ResponseEntity.status(HttpStatus.OK).body(bookService.getByAuthor(name, pageable).getContent());
     }
 
     @GetMapping("/by-category/{categoryId}")
@@ -54,7 +54,19 @@ public class BookController {
             Pageable pageable,
             @PathVariable("categoryId") Long categoryId
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllByCategory(categoryId, pageable).getContent());
+        return ResponseEntity.status(HttpStatus.OK).body(bookService.getByCategory(categoryId, pageable).getContent());
+    }
+
+    @GetMapping("/best-rated")
+    @PreAuthorize("hasAuthority('SCOPE_BASIC')")
+    public ResponseEntity<List<BookDTO>> getBestRated(Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(bookService.getBestRated(pageable).getContent());
+    }
+
+    @GetMapping("/most-borrowed")
+    @PreAuthorize("hasAuthority('SCOPE_BASIC')")
+    public ResponseEntity<List<BookDTO>> getMostBorrowed(Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(bookService.getMostBorrowed(pageable).getContent());
     }
 
     @PutMapping("/{id}")

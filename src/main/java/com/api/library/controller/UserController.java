@@ -20,6 +20,7 @@ import java.util.UUID;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -34,7 +35,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/users")
+    @GetMapping
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<List<UserDTO>> getAll() {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAll());
@@ -61,7 +62,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body("E-mail verified successfully");
     }
 
-    @GetMapping("/{email}/loan-history")
+    @GetMapping("/loan-history/{email}")
     @PreAuthorize("hasAuthority('SCOPE_BASIC')")
     public ResponseEntity<List<LoanDTO>> getLoans(
             @AuthenticationPrincipal Jwt jwt,

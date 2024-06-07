@@ -97,11 +97,33 @@ public class BookService {
      * @return the Page of books
      * @throws EntityNotFoundException if author is not found
      */
-    public Page<BookDTO> getAllByAuthor(String name, Pageable pageable) {
+    public Page<BookDTO> getByAuthor(String name, Pageable pageable) {
         if (!authorRepository.existsByName(name)) {
             throw new EntityNotFoundException("Author not found with this name: " + name);
         }
         return bookRepository.findAllByAuthor(name, pageable).map(
+                book -> mappingService.toDto(book)
+        );
+    }
+
+    /**
+     * retrieves the best rated books
+     *
+     * @return the Page of books
+     */
+    public Page<BookDTO> getBestRated(Pageable pageable) {
+        return bookRepository.findBestRated(pageable).map(
+                book -> mappingService.toDto(book)
+        );
+    }
+
+    /**
+     * retrieves the most borrowed books
+     *
+     * @return the Page of books
+     */
+    public Page<BookDTO> getMostBorrowed(Pageable pageable) {
+        return bookRepository.findMostBorrowed(pageable).map(
                 book -> mappingService.toDto(book)
         );
     }
@@ -113,7 +135,7 @@ public class BookService {
      * @return the Page of books
      * @throws EntityNotFoundException if category is not found
      */
-    public Page<BookDTO> getAllByCategory(Long categoryId, Pageable pageable) {
+    public Page<BookDTO> getByCategory(Long categoryId, Pageable pageable) {
         if (!categoryRepository.existsById(categoryId)) {
             throw new EntityNotFoundException("Category not found with this id: " + categoryId);
         }

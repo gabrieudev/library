@@ -28,4 +28,26 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     )
     Page<Book> findAllByCategory(@Param("categoryId") Long categoryId, Pageable pageable);
 
+    @Query(
+            value = "SELECT b.* " +
+                    "FROM tb_books b " +
+                    "JOIN tb_reviews r " +
+                    "ON b.id = r.book_id " +
+                    "GROUP BY b.id " +
+                    "ORDER BY SUM(r.rating) DESC",
+            nativeQuery = true
+    )
+    Page<Book> findBestRated(Pageable pageable);
+
+    @Query(
+            value = "SELECT b.* " +
+                    "FROM tb_books b " +
+                    "JOIN tb_loans l " +
+                    "ON b.id = l.book_id " +
+                    "GROUP BY b.id " +
+                    "ORDER BY COUNT(*) DESC",
+            nativeQuery = true
+    )
+    Page<Book> findMostBorrowed(Pageable pageable);
+
 }
