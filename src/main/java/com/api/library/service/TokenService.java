@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 import java.time.Instant;
+import java.util.UUID;
 
 @Service
 public class TokenService {
@@ -40,6 +41,17 @@ public class TokenService {
      */
     public boolean notBelongs(Jwt jwt, String email) {
         return !email.equals(jwt.getClaim("email").toString()) || !jwt.getClaim("scope").toString().contains("ADMIN");
+    }
+
+    /**
+     * verify if the subject jwt is not equal to the user id
+     *
+     * @param jwt user's jwt
+     * @param userId user's id
+     * @return boolean
+     */
+    public boolean notBelongs(Jwt jwt, UUID userId) {
+        return !jwt.getSubject().equals(userId.toString()) || !jwt.getClaim("scope").toString().contains("ADMIN");
     }
 
 }

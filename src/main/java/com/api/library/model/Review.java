@@ -27,11 +27,11 @@ public class Review {
     private User user;
 
     @Column(nullable = false)
-    private double rating;
+    private int rating;
 
     private String comment;
 
-    @Column(nullable = false)
+    @Column(name = "review_date", nullable = false)
     private Date reviewDate;
 
 }

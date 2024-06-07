@@ -1,5 +1,7 @@
 package com.api.library.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -17,11 +19,12 @@ public class ReviewDTO {
     private BookDTO book;
 
     @NotNull
+    @JsonIgnore
     private UserDTO user;
 
     @NotNull
-    @Size(min = 0, max = 5)
-    private double rating;
+    @Max(value = 5)
+    private int rating;
 
     private String comment;
 
