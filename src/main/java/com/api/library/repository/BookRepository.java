@@ -34,7 +34,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                     "JOIN tb_reviews r " +
                     "ON b.id = r.book_id " +
                     "GROUP BY b.id " +
-                    "ORDER BY SUM(r.rating) DESC",
+                    "ORDER BY AVG(r.rating) DESC",
             nativeQuery = true
     )
     Page<Book> findBestRated(Pageable pageable);
