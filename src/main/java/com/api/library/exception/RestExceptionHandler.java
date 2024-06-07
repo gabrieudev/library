@@ -9,6 +9,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.Instant;
+
 @RestControllerAdvice
 public class RestExceptionHandler {
 
@@ -16,6 +18,8 @@ public class RestExceptionHandler {
     public ProblemDetail handleEntityNotFoundException(EntityNotFoundException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getLocalizedMessage());
         problemDetail.setTitle("Entity not found");
+        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("stacktrace", e.getStackTrace());
         return problemDetail;
     }
 
@@ -23,6 +27,8 @@ public class RestExceptionHandler {
     public ProblemDetail handleAccessDeniedException(AccessDeniedException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, e.getLocalizedMessage());
         problemDetail.setTitle("Access denied");
+        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("stacktrace", e.getStackTrace());
         return problemDetail;
     }
 
@@ -30,6 +36,8 @@ public class RestExceptionHandler {
     public ProblemDetail handleBadCredentialsException(BadCredentialsException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, e.getLocalizedMessage());
         problemDetail.setTitle("Bad credentials");
+        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("stacktrace", e.getStackTrace());
         return problemDetail;
     }
 
@@ -37,6 +45,8 @@ public class RestExceptionHandler {
     public ProblemDetail handleDataIntegrityViolationException(DataIntegrityViolationException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
         problemDetail.setTitle("Data integrity error");
+        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("stacktrace", e.getStackTrace());
         return problemDetail;
     }
 
@@ -44,6 +54,8 @@ public class RestExceptionHandler {
     public ProblemDetail handleUserAlreadyExistsException(UserAlreadyExistsException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getLocalizedMessage());
         problemDetail.setTitle("User already exists");
+        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("stacktrace", e.getStackTrace());
         return problemDetail;
     }
 
@@ -51,6 +63,8 @@ public class RestExceptionHandler {
     public ProblemDetail handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_ACCEPTABLE, e.getLocalizedMessage());
         problemDetail.setTitle("Your request parameters didn't validate");
+        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("stacktrace", e.getStackTrace());
         return problemDetail;
     }
 
