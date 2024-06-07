@@ -39,7 +39,7 @@ public class TokenService {
      * @return boolean
      */
     public boolean notBelongs(Jwt jwt, String email) {
-        return !email.equals(jwt.getClaim("email").toString());
+        return !email.equals(jwt.getClaim("email").toString()) || !jwt.getClaim("scope").toString().contains("ADMIN");
     }
 
 }

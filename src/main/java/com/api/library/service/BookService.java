@@ -3,7 +3,9 @@ package com.api.library.service;
 import com.api.library.dto.BookDTO;
 import com.api.library.exception.EntityNotFoundException;
 import com.api.library.model.Book;
+import com.api.library.repository.AuthorRepository;
 import com.api.library.repository.BookRepository;
+import com.api.library.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,12 @@ public class BookService {
 
     @Autowired
     private MappingService mappingService;
+
+    @Autowired
+    private AuthorRepository authorRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     /**
      * Retrieves a book by its id
@@ -87,8 +95,12 @@ public class BookService {
      *
      * @param name the author's name
      * @return the Page of books
+     * @throws EntityNotFoundException if author is not found
      */
     public Page<BookDTO> getAllByAuthor(String name, Pageable pageable) {
+        if (!authorRepository.existsByName(name)) {
+            throw new EntityNotFoundException("Author not found with this name: " + name);
+        }
         return bookRepository.findAllByAuthor(name, pageable).map(
                 book -> mappingService.toDto(book)
         );
@@ -99,8 +111,12 @@ public class BookService {
      *
      * @param categoryId the category's id
      * @return the Page of books
+     * @throws EntityNotFoundException if category is not found
      */
     public Page<BookDTO> getAllByCategory(Long categoryId, Pageable pageable) {
+        if (!categoryRepository.existsById(categoryId)) {
+            throw new EntityNotFoundException("Category not found with this id: " + categoryId);
+        }
         return bookRepository.findAllByCategory(categoryId, pageable).map(
                 book -> mappingService.toDto(book)
         );

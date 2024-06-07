@@ -6,8 +6,11 @@ import com.api.library.exception.UserAlreadyExistsException;
 import com.api.library.model.CheckerUser;
 import com.api.library.model.User;
 import com.api.library.repository.CheckerUserRepository;
+import com.api.library.repository.LoanRepository;
 import com.api.library.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -38,6 +41,9 @@ public class UserService {
 
     @Autowired
     private CheckerUserRepository checkerUserRepository;
+
+    @Autowired
+    private LoanRepository loanRepository;
 
     /**
      * log in a user and return a JWT
@@ -153,6 +159,22 @@ public class UserService {
 
         return userRepository.save(user);
 
+    }
+
+    /**
+     * retrieves all the loans by its user
+     *
+     * @param email the user's email
+     * @return the Page of loans
+     * @throws EntityNotFoundException if user is not found
+     */
+    public Page<LoanDTO> getLoans(String email, Pageable pageable) {
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new EntityNotFoundException("User not found with this email: " + email)
+        );
+        return loanRepository.findByUser(user, pageable).map(
+                loan -> mappingService.toDto(loan)
+        );
     }
 
     /**
