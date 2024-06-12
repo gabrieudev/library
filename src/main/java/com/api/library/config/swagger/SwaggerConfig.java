@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
 
     @Bean
-    public OpenAPI lanchoneteOpenAPI(){
+    public OpenAPI libraryOpenAPI(){
         return new OpenAPI()
                 .info(new Info().title("Library")
                         .description("REST API for a Library")
